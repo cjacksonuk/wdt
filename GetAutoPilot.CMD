@@ -2,7 +2,7 @@
 :: ------------------------------------------------------------
 :: Useful Commands - (C) Christian Jackson support@icthero.co.uk
 :: run commands -----------------------------------------------
-::
+:: 1
 SET version="1.4"
 SET versionDate="14/03/25"
 ::
