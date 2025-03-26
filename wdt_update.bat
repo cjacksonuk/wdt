@@ -52,18 +52,21 @@ if "%LOCAL_VERSION%"=="%REMOTE_VERSION%" (
 
 
 :: Step 5: Download latest version ZIP
-echo ⬇️  Downloading update...
+echo Downloading update...
 if exist "%TEMP_DIR%" rd /s /q "%TEMP_DIR%"
 mkdir "%TEMP_DIR%"
 powershell -Command "(Invoke-WebRequest -Uri \"%ZIP_URL%\" -OutFile \"%TEMP_DIR%\update.zip\")"
 
 :: Step 6: Extract and replace
 powershell -Command "Expand-Archive -Path '%TEMP_DIR%\update.zip' -DestinationPath '%TEMP_DIR%' -Force"
-echo 🔁 Updating files...
-robocopy "%TEMP_DIR%\%REPO_NAME%-main" "%scriptRoot%" /E /NFL /NDL /NJH /NJS /NC
+echo Updating files...
+::robocopy "%TEMP_DIR%\%REPO_NAME%-main" "%scriptRoot%" /E /NFL /NDL /NJH /NJS /NC
+echo attempting to place in %scriptRoot%
+echo from %TEMP_DIR%\%REPO_NAME%-main to %scriptRoot%
+robocopy "%TEMP_DIR%\%REPO_NAME%-main" %scriptRoot% /E /NFL /NDL /NJH /NJS /NC
 
 :: Step 7: Cleanup
 rd /s /q "%TEMP_DIR%"
-echo ✅ Update complete! Now running version %REMOTE_VERSION%.
+echo Update complete! Now running version %REMOTE_VERSION%.
 pause
 exit /b 0
