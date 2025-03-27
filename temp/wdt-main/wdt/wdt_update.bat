@@ -12,7 +12,7 @@ echo Root path is: %rootPath%
 :: CONFIG
 set "REPO_USER=cjacksonuk"
 set "REPO_NAME=wdt"
-set "LOCAL_VERSION_FILE=%rootPath%\wdt\wdt_version.txt"
+set "LOCAL_VERSION_FILE=%scriptRoot%\wdt\wdt_version.txt"
 set "TEMP_DIR=%rootPath%temp"
 set "ZIP_URL=https://github.com/%REPO_USER%/%REPO_NAME%/archive/refs/heads/main.zip"
 set "REMOTE_VERSION_URL=https://raw.githubusercontent.com/%REPO_USER%/%REPO_NAME%/main/wdt/wdt_version.txt"
