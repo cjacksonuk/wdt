@@ -46,7 +46,8 @@ for /f "delims=" %%A in ('powershell -Command "try { (Invoke-WebRequest -Uri \"%
 
 if "%REMOTE_VERSION%"=="ERROR" (
     echo Failed to fetch remote version. Update aborted.
-    exit /b 1
+    rem exit /b 1
+    goto :eof
 )
 :: Step 4: Compare versions
 echo Local version : %LOCAL_VERSION%
@@ -54,6 +55,7 @@ echo Remote version: %REMOTE_VERSION%
 if "%LOCAL_VERSION%"=="%REMOTE_VERSION%" (
     echo Already up to date!
     rem exit /b 0
+    goto :eof
 )
 
 
@@ -76,3 +78,6 @@ rd /s /q "%TEMP_DIR%"
 echo Update complete! Now running version %REMOTE_VERSION%.
 pause
 rem exit /b 0
+goto :eof
+
+:eof
