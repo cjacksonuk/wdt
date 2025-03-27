@@ -1,2 +1,0 @@
-# wdt
-Windows device tool

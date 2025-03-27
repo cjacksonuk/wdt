@@ -71,7 +71,7 @@ echo from %TEMP_DIR%\%REPO_NAME%-main to %scriptRoot%
 robocopy "%TEMP_DIR%\%REPO_NAME%-main" %rootPath% /E /NFL /NDL /NJH /NJS /NC
 
 :: Step 7: Cleanup
-:::rd /s /q "%TEMP_DIR%"
+rd /s /q "%TEMP_DIR%"
 echo Update complete! Now running version %REMOTE_VERSION%.
 pause
 exit /b 0

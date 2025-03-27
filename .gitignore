@@ -2,3 +2,6 @@
 AutopilotDiagnostic.log
 *.csv
 wdt/install_log.txt
+/temp
+temp/update.zip
+temp/wdt-main/README.md
