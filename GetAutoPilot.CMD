@@ -2,29 +2,43 @@
 :: ------------------------------------------------------------
 :: Useful Commands - (C) Christian Jackson support@icthero.co.uk
 :: run commands -----------------------------------------------
-:: 1
-SET version="1.4"
-SET versionDate="14/03/25"
-::
-:: v1 11/07/21 - Initial release
-:: V1.2 14/06/24 - added sysprep to get back to OOBE
-:: V1.3 14/03/25 - ADDED  owner and grouptage and date 
-:: V1.4 14/03/25 - ADDED  device rename and collect drivers option
-:: ------------------------------------------------------------
-:: ------------------------------------------------------------
-:: ideas:
-::
-::
-:: ------------------------------------------------------------
 :: 
+:: v1.0.0 11/07/21 - Initial release
+:: V1.0.2 14/06/24 - added sysprep to get back to OOBE
+:: V1.0.3 14/03/25 - ADDED  owner and grouptage and date 
+:: V1.0.4 14/03/25 - ADDED  device rename and collect drivers option
+:: ------------------------------------------------------------
 
 ::try to determin path of files...
 for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do if exist %%D:\Get-WindowsAutoPilotInfo.ps1 (set scriptRoot=%%D:\)
 cd %scriptRoot%
 ::%scriptRoot%
 
+setlocal enabledelayedexpansion
+:: check update
+:: CONFIG - for checking if update is available
+set "REPO_USER=cjacksonuk"
+set "REPO_NAME=wdt"
+set "LOCAL_VERSION_FILE=%scriptRoot%wdt_version.txt"
+set "REMOTE_VERSION_URL=https://raw.githubusercontent.com/%REPO_USER%/%REPO_NAME%/main/wdt_version.txt"
+endlocal & set "REPO_USER=%REPO_USER%" & set "REPO_NAME=%REPO_NAME%" & set "LOCAL_VERSION_FILE=%LOCAL_VERSION_FILE%" & set "REMOTE_VERSION_URL=%REMOTE_VERSION_URL%"
+
 ::echo Enabling WinRM
-PowerShell -NoProfile -ExecutionPolicy Unrestricted -Command Enable-PSRemoting -SkipNetworkProfileCheck -Force
+::PowerShell -NoProfile -ExecutionPolicy Unrestricted -Command Enable-PSRemoting -SkipNetworkProfileCheck -Force
+
+::detect if script is running as an admin - if not display message and exit - if running as admin display message and continue
+:: Check if the script is running as an administrator
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ------------------------------------------------------------------------------
+    echo This script requires administrative privileges. Please run as administrator.
+    echo if you continue there may be limited functionality.
+    echo ------------------------------------------------------------------------------
+    pause
+) else (
+    echo Script is running with administrative privileges. Continuing...
+)
+
 
 set assetNO=%ComputerName%
 set defaultAssetNo=%ComputerName%
@@ -54,6 +68,17 @@ set defaultLoggedInUser=%USERNAME%
 :: if they dont exist we will ask the user to populate them
 
 setlocal enabledelayedexpansion
+:: check if there is an internet connect and set flag
+echo Checking internet connection...
+ping -n 1 github.com >nul 2>&1
+if errorlevel 1 (
+    echo No internet connection. Update check aborted.
+    set "internetAvailable=false"
+) else (
+    echo Internet connection detected. Able to check for updates...
+    set "internetAvailable=true"
+) 
+:: end of check internet
 
 :: Ensure scriptRoot has a trailing backslash
 if not "%scriptRoot:~-1%"=="\" set "scriptRoot=%scriptRoot%\"
@@ -83,23 +108,58 @@ if not exist "%varsFile%" (
 )
 
 :: Pass variables outside endlocal
-endlocal & set "company=%company%" & set "location=%location%" & set "grouptag=%grouptag%" & set "varsFile=%varsFile%"
+endlocal & set "company=%company%" & set "location=%location%" & set "grouptag=%grouptag%" & set "varsFile=%varsFile%" & set "internetAvailable=%internetAvailable%" 
+
+:: continue check for update
+:: if internet is available then check for update
+if "%internetAvailable%"=="true" (
+echo  attempt to check for update
+setlocal enabledelayedexpansion
+  ::getting local version
+   echo looking for %REMOTE_VERSION_URL%
+    for /f "delims=" %%A in ('powershell -Command "try { (Invoke-WebRequest -Uri \"%REMOTE_VERSION_URL%\" -UseBasicParsing).Content } catch { Write-Output \"ERROR\" }"') do set "REMOTE_VERSION=%%A"
+if "%REMOTE_VERSION%"=="ERROR" (
+        echo Failed to fetch remote version. Update check aborted.
+        set "updateAvailable=false"
+    ) else (
+        ::getting local version
+        echo looking for %LOCAL_VERSION_FILE%
+        if not exist "%LOCAL_VERSION_FILE%" (
+            echo Local version file not found. Assuming version 0.0.0
+            set "LOCAL_VERSION=0.0.0"
+        ) else (
+            set /p LOCAL_VERSION=<"%LOCAL_VERSION_FILE%"
+            ::echo Local version found: %LOCAL_VERSION%
+            echo Local version found: !LOCAL_VERSION!
+        )
+    )
+
+   ) else ( echo not checking update)
+   endlocal & set "REMOTE_VERSION=%REMOTE_VERSION%" & set "updateAvailable=%updateAvailable%" & set "LOCAL_VERSION=%LOCAL_VERSION%" & set "LOCAL_VERSION_FILE=%LOCAL_VERSION_FILE%"
+:: end of check for update
 
 :: Now the variables are available outside of setlocal
 echo Company outside endlocal: %company%
 echo Location outside endlocal: %location%
 echo Grouptag outside endlocal: %grouptag%
-echo VarsFile : 
+echo VarsFile : %varsFile%
 ::pause
 
-echo ............................................
-echo .
+::echo ............................................
+::echo .
 ::
 
 :MENU
 cls
 echo ........................................................
-echo : ICT Hero AutoPilot Script %version% %versionDate% : support@icthero.co.uk
+:: if the update is available then display message current version and available version number
+:: Compare the versions
+if "%LOCAL_VERSION%" NEQ "%REMOTE_VERSION%" (
+    echo UPDATE AVAILABLE! Current version: %LOCAL_VERSION% Available version: %REMOTE_VERSION%
+    echo ........................................................
+)
+::echo : ICT Hero AutoPilot Script %version% %versionDate% : support@icthero.co.uk
+echo : ICT Hero WDT Version %LOCAL_VERSION% : support@icthero.co.uk
 echo : Timestamp : %TIMESTAMP%
 echo : Asset = %assetNo%
 echo : Company = %company%
