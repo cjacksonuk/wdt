@@ -205,6 +205,7 @@ IF %M%==8 GOTO DELETEDATA
 IF %M%==10 GOTO GetDrivers
 IF %M%==11 GOTO SetDeviceName
 IF %M%==90 GOTO installcwc
+IF %M%==98 GOTO updateSoftware
 IF %M%==99 GOTO EOF
 
 :CHANGEASSET
@@ -497,6 +498,12 @@ if "%adminRights%"=="true" (
 ::pause or wait 5 seconds
 timeout /t 5
 goto :menu
+
+:updateSoftware
+::call %rootPath% \ wdt\ wdt_update.bat
+%rootPath%wdt\wdt_update.bat
+goto :menu
+
 
 :EXIT
 pause
