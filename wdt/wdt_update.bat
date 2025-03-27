@@ -1,5 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
+:: v1.0.0 2025-03-27 cjacksonuk - update script for wdt
 
 ::try to determin path of files...
 for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do if exist %%D:\runwdt.CMD (set scriptRoot=%%D:\wdt)
