@@ -501,8 +501,11 @@ timeout /t 5
 goto :menu
 
 :updateSoftware
+:: start in a new process
 start %rootPath%wdt\wdt_update.bat
 ::%rootPath%wdt\wdt_update.bat
+echo closing app so upate can run...
+ exit /b 1
 goto :menu
 
 
