@@ -162,6 +162,7 @@ echo ........................................................
 :: Compare the versions
 if "%LOCAL_VERSION%" NEQ "%REMOTE_VERSION%" (
     echo UPDATE AVAILABLE! Current version: %LOCAL_VERSION% Available version: %REMOTE_VERSION%
+    echo key in option 98 to update
     echo ........................................................
 )
 ::echo : ICT Hero AutoPilot Script %version% %versionDate% : support@icthero.co.uk
@@ -500,8 +501,8 @@ timeout /t 5
 goto :menu
 
 :updateSoftware
-::call %rootPath% \ wdt\ wdt_update.bat
-%rootPath%wdt\wdt_update.bat
+start %rootPath%wdt\wdt_update.bat
+::%rootPath%wdt\wdt_update.bat
 goto :menu
 
 
