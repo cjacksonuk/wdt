@@ -53,7 +53,7 @@ echo Local version : %LOCAL_VERSION%
 echo Remote version: %REMOTE_VERSION%
 if "%LOCAL_VERSION%"=="%REMOTE_VERSION%" (
     echo Already up to date!
-    exit /b 0
+    rem exit /b 0
 )
 
 
@@ -75,4 +75,4 @@ robocopy "%TEMP_DIR%\%REPO_NAME%-main" %rootPath% /E /NFL /NDL /NJH /NJS /NC
 rd /s /q "%TEMP_DIR%"
 echo Update complete! Now running version %REMOTE_VERSION%.
 pause
-exit /b 0
+rem exit /b 0
