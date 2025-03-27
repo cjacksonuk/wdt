@@ -2,17 +2,20 @@
 setlocal enabledelayedexpansion
 
 ::try to determin path of files...
-for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do if exist %%D:\Get-WindowsAutoPilotInfo.ps1 (set scriptRoot=%%D:\)
+for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do if exist %%D:\runwdt.CMD (set scriptRoot=%%D:\wdt)
 cd %scriptRoot%
 ::%scriptRoot%
+echo Script Root is: %scriptRoot%
+set "rootPath=%~d0\"
+echo Root path is: %rootPath%
 
 :: CONFIG
 set "REPO_USER=cjacksonuk"
 set "REPO_NAME=wdt"
-set "LOCAL_VERSION_FILE=wdt_version.txt"
-set "TEMP_DIR=%scriptRoot%\temp"
+set "LOCAL_VERSION_FILE=%scriptRoot%\wdt_version.txt"
+set "TEMP_DIR=%rootPath%\temp"
 set "ZIP_URL=https://github.com/%REPO_USER%/%REPO_NAME%/archive/refs/heads/main.zip"
-set "REMOTE_VERSION_URL=https://raw.githubusercontent.com/%REPO_USER%/%REPO_NAME%/main/wdt_version.txt"
+set "REMOTE_VERSION_URL=https://raw.githubusercontent.com/%REPO_USER%/%REPO_NAME%/main/wdt/wdt_version.txt"
 
 :: Ensure TEMP_DIR exists
 if not exist "%TEMP_DIR%" (
@@ -27,11 +30,13 @@ ping -n 1 github.com >nul 2>&1 || (
 )
 
 :: Step 2: Read local version
+echo looking for %LOCAL_VERSION_FILE%
 if not exist "%LOCAL_VERSION_FILE%" (
     echo Local version file not found. Assuming version 0.0.0
     set "LOCAL_VERSION=0.0.0"
 ) else (
     set /p LOCAL_VERSION=<"%LOCAL_VERSION_FILE%"
+    echo Local version is !LOCAL_VERSION!
 )
 
 :: Step 3: Fetch remote version

@@ -7,6 +7,7 @@
 :: V1.0.2 14/06/24 - added sysprep to get back to OOBE
 :: V1.0.3 14/03/25 - ADDED  owner and grouptage and date 
 :: V1.0.4 14/03/25 - ADDED  device rename and collect drivers option
+:: V1.0.5 27/03/25 - ADDED  check for update / relocated files to wdt folder
 :: ------------------------------------------------------------
 
 ::try to determin path of files...
@@ -23,7 +24,7 @@ setlocal enabledelayedexpansion
 set "REPO_USER=cjacksonuk"
 set "REPO_NAME=wdt"
 set "LOCAL_VERSION_FILE=%scriptRoot%\wdt_version.txt"
-set "REMOTE_VERSION_URL=https://raw.githubusercontent.com/%REPO_USER%/%REPO_NAME%/main/wdt_version.txt"
+set "REMOTE_VERSION_URL=https://raw.githubusercontent.com/%REPO_USER%/%REPO_NAME%/main/wdt/wdt_version.txt"
 endlocal & set "REPO_USER=%REPO_USER%" & set "REPO_NAME=%REPO_NAME%" & set "LOCAL_VERSION_FILE=%LOCAL_VERSION_FILE%" & set "REMOTE_VERSION_URL=%REMOTE_VERSION_URL%"
 
 ::echo Enabling WinRM
