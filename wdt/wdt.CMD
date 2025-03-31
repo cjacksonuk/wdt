@@ -8,6 +8,7 @@
 :: V1.0.3 14/03/25 - ADDED  owner and grouptage and date 
 :: V1.0.4 14/03/25 - ADDED  device rename and collect drivers option
 :: V1.0.5 27/03/25 - ADDED  check for update / relocated files to wdt folder
+:: V1.0.6 31/03/31 - Bugfix - issue writing to csv
 :: ------------------------------------------------------------
 
 ::try to determin path of files...
@@ -245,7 +246,8 @@ GOTO MENU
 :RUNAUTOPILOT2CSV
 
 echo Gathering AutoPilot Hash
-PowerShell -NoProfile -ExecutionPolicy Unrestricted -Command %~dp0Get-WindowsAutoPilotInfo.ps1 -ComputerName $env:computername -OutputFile %rootPath%WDTcompHash.csv -append
+::PowerShell -NoProfile -ExecutionPolicy Unrestricted -Command %~dp0Get-WindowsAutoPilotInfo.ps1 -ComputerName $env:computername -OutputFile %rootPath%WDTcompHash.csv -append
+PowerShell -NoProfile -ExecutionPolicy Unrestricted -Command %~dp0Get-WindowsAutoPilotInfo.ps1 -ComputerName $env:computername -OutputFile "%rootPath%WDTcompHash.csv" -append
 echo ...Hash Collected!
 GOTO AUDIT
 GOTO MENU
