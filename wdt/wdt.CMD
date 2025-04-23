@@ -309,6 +309,9 @@ GOTO MENU
 :sysprep
 ::%windir%/system32/sysprep/sysprep.exe /generalize /oobe /shutdown /quiet
 %windir%/system32/sysprep/sysprep.exe /oobe /reboot
+echo If this fails, obviously check the logs - but it might be in audit mode; waiting to complete Windows Update!
+pause
+GOTO MENU
 
 :: build in option to erase data
 :DELETEDATA
