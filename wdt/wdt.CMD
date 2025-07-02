@@ -8,7 +8,8 @@
 :: V1.0.3 14/03/25 - ADDED  owner and grouptage and date 
 :: V1.0.4 14/03/25 - ADDED  device rename and collect drivers option
 :: V1.0.5 27/03/25 - ADDED  check for update / relocated files to wdt folder
-:: V1.0.6 31/03/31 - Bugfix - issue writing to csv
+:: V1.0.6 31/03/25 - Bugfix - issue writing to csv
+:: V1.0.7 02/07/25 - Add ms-settings - convienience to open wifi and display controls (for devices with wrong orientation)
 :: ------------------------------------------------------------
 
 ::try to determin path of files...
@@ -188,6 +189,8 @@ echo 7 - SYSTEM RESET - Wipes all data
 echo 8 - DELETE ALL DATA
 echo 10 - Get drivers for WDS
 ::echo 11 - Set - Rename device - not needed as option 1 does this now too
+echo 80 - Display Settings - start ms-settings:display
+echo 81 - Connect to WiFi - start ms-settings:network-wifi
 echo 90 - Install Connectwise Control (Do opt 1 first!)
 echo 99 - Exit
 echo ............................................
@@ -206,6 +209,8 @@ IF %M%==7 GOTO SYSTEMRESET
 IF %M%==8 GOTO DELETEDATA
 IF %M%==10 GOTO GetDrivers
 IF %M%==11 GOTO SetDeviceName
+IF %M%==80 GOTO MsSettingsDisplay
+IF %M%==81 GOTO MsSettingsWiFi
 IF %M%==90 GOTO installcwc
 IF %M%==98 GOTO updateSoftware
 IF %M%==99 GOTO EOF
@@ -503,6 +508,13 @@ if "%adminRights%"=="true" (
 
 ::pause or wait 5 seconds
 timeout /t 5
+goto :menu
+
+:MsSettingsDisplay
+start ms-settings:display
+goto :menu
+:MsSettingsWiFi
+start ms-settings:network-wifi
 goto :menu
 
 :updateSoftware
