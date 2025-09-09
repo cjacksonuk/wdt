@@ -68,7 +68,7 @@ set "MI=%datetime:~10,2%"
 set "SS=%datetime:~12,2%"
 
 :: Format as yyyy-MM-dd HH:mm:ss
-set "TIMESTAMP=%YYYY%-%MM%-%DD% %HH%:%MI%:%SS%"
+call set "TIMESTAMP=%YYYY%-%MM%-%DD% %HH%:%MI%:%SS%"
 
 :: Display the timestamp
 echo %TIMESTAMP%
