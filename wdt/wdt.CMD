@@ -21,6 +21,9 @@ echo Script Root is: %scriptRoot%
 set "rootPath=%~d0\"
 echo Root path is: %rootPath%
 
+::try prerun file - ignore cert.
+powershell -NoProfile -ExecutionPolicy Unrestricted -File "%scriptRoot%\prerun.ps1"
+
 setlocal enabledelayedexpansion
 :: check update
 :: CONFIG - for checking if update is available
@@ -28,13 +31,11 @@ set "REPO_USER=cjacksonuk"
 set "REPO_NAME=wdt"
 set "LOCAL_VERSION_FILE=%scriptRoot%\wdt_version.txt"
 set "REMOTE_VERSION_URL=https://raw.githubusercontent.com/%REPO_USER%/%REPO_NAME%/main/wdt/wdt_version.txt"
+
 endlocal & set "REPO_USER=%REPO_USER%" & set "REPO_NAME=%REPO_NAME%" & set "LOCAL_VERSION_FILE=%LOCAL_VERSION_FILE%" & set "REMOTE_VERSION_URL=%REMOTE_VERSION_URL%"
 
 ::echo Enabling WinRM
 ::PowerShell -NoProfile -ExecutionPolicy Unrestricted -Command Enable-PSRemoting -SkipNetworkProfileCheck -Force
-
-powershell -NoProfile -ExecutionPolicy Unrestricted -File "%scriptRoot%\prerun.ps1"
-
 
 ::detect if script is running as an admin - if not display message and exit - if running as admin display message and continue
 :: Check if the script is running as an administrator
