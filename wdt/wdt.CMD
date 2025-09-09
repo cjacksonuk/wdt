@@ -10,6 +10,7 @@
 :: V1.0.5 27/03/25 - ADDED  check for update / relocated files to wdt folder
 :: V1.0.6 31/03/25 - Bugfix - issue writing to csv
 :: V1.0.7 02/07/25 - Add ms-settings - convienience to open wifi and display controls (for devices with wrong orientation)
+:: V1.0.8 09/09/25 - Added ability to ignore cert - required to install nuget from onegetcdn.azureedge.net
 :: ------------------------------------------------------------
 
 ::try to determin path of files...
@@ -31,6 +32,9 @@ endlocal & set "REPO_USER=%REPO_USER%" & set "REPO_NAME=%REPO_NAME%" & set "LOCA
 
 ::echo Enabling WinRM
 ::PowerShell -NoProfile -ExecutionPolicy Unrestricted -Command Enable-PSRemoting -SkipNetworkProfileCheck -Force
+
+powershell -NoProfile -ExecutionPolicy Unrestricted -File "%scriptRoot%\prerun.ps1"
+
 
 ::detect if script is running as an admin - if not display message and exit - if running as admin display message and continue
 :: Check if the script is running as an administrator
